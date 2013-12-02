@@ -1,11 +1,7 @@
 /*
- * softTone.c:
- *	For that authentic retro sound...
- *	Er... A little experiment to produce tones out of a Pi using
- *	one (or 2) GPIO pins and a piezeo "speaker" element.
- *	(Or a high impedance speaker, but don'y blame me if you blow-up
- *	the GPIO pins!)
- *	Copyright (c) 2012 Gordon Henderson
+ * 23s17.h:
+ *	Extend wiringPi with the MCP 23s17 SPI GPIO expander chip
+ *	Copyright (c) 2013 Gordon Henderson
  ***********************************************************************
  * This file is part of wiringPi:
  *	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -30,8 +26,7 @@
 extern "C" {
 #endif
 
-extern int  softToneCreate (int pin) ;
-extern void softToneWrite  (int pin, int frewq) ;
+extern int mcp23s17Setup (int pinBase, int spiPort, int devId) ;
 
 #ifdef __cplusplus
 }

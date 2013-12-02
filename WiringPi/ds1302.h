@@ -1,10 +1,8 @@
 /*
- * lcd.h:
- *	Text-based LCD driver.
- *	This is designed to drive the parallel interface LCD drivers
- *	based in the Hitachi HD44780U controller and compatables.
+ * ds1302.h:
+ *	Real Time clock
  *
- * Copyright (c) 2012 Gordon Henderson.
+ * Copyright (c) 2013 Gordon Henderson.
  ***********************************************************************
  * This file is part of wiringPi:
  *	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -24,22 +22,22 @@
  ***********************************************************************
  */
 
-#define	MAX_LCDS	8
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern void lcdHome        (int fd) ;
-extern void lcdClear       (int fd) ;
-extern void lcdSendCommand (int fd, uint8_t command) ;
-extern void lcdPosition    (int fd, int x, int y) ;
-extern void lcdPutchar     (int fd, uint8_t data) ;
-extern void lcdPuts        (int fd, char *string) ;
-extern void lcdPrintf      (int fd, char *message, ...) ;
+extern unsigned int ds1302rtcRead       (int reg) ;
+extern void         ds1302rtcWrite      (int reg, unsigned int data) ;
 
-extern int  lcdInit (int rows, int cols, int bits, int rs, int strb,
-	int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7) ;
+extern unsigned int ds1302ramRead       (int addr) ;
+extern void         ds1302ramWrite      (int addr, unsigned int data) ;
+
+extern void         ds1302clockRead     (int clockData [8]) ;
+extern void         ds1302clockWrite    (int clockData [8]) ;
+
+extern void         ds1302trickleCharge (int diodes, int resistors) ;
+
+extern void         ds1302setup         (int clockPin, int dataPin, int csPin) ;
 
 #ifdef __cplusplus
 }

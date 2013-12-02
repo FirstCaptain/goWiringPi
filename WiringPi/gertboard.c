@@ -38,16 +38,17 @@
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 
+#include "wiringPi.h"
 #include "wiringPiSPI.h"
 
 #include "gertboard.h"
 
 // The A-D convertor won't run at more than 1MHz @ 3.3v
 
-#define	SPI_ADC_SPEED	 1000000
-#define	SPI_DAC_SPEED	 1000000
-#define	SPI_A2D		0
-#define	SPI_D2A		1
+#define	SPI_ADC_SPEED	1000000
+#define	SPI_DAC_SPEED	1000000
+#define	SPI_A2D		      0
+#define	SPI_D2A		      1
 
 
 /*
@@ -117,6 +118,49 @@ int gertboardSPISetup (void)
 
   if (wiringPiSPISetup (SPI_D2A, SPI_DAC_SPEED) < 0)
     return -1 ;
+
+  return 0 ;
+}
+
+
+/*
+ * New wiringPi node extension methods.
+ *********************************************************************************
+ */
+
+int gbWiringPiAnalogRead (struct wiringPiNodeStruct *node, int chan)
+{
+  chan -= node->pinBase ;
+  return gertboardAnalogRead (chan) ;
+}
+
+void gbWiringPiAnalogWrite (struct wiringPiNodeStruct *node, int chan, int value)
+{
+  chan -= node->pinBase ;
+  gertboardAnalogWrite (chan, value) ;
+}
+
+
+/*
+ * gertboardAnalogSetup:
+ *	Create a new wiringPi device node for the analog devices on the
+ *	Gertboard. We create one node with 2 pins - each pin being read
+ *	and write - although the operations actually go to different
+ *	hardware devices.
+ *********************************************************************************
+ */
+
+int gertboardAnalogSetup (int pinBase)
+{
+  struct wiringPiNodeStruct *node ;
+  int    x ;
+
+  if (( x = gertboardSPISetup ()) != 0)
+    return  x;
+
+  node = wiringPiNewNode (pinBase, 2) ;
+  node->analogRead  = gbWiringPiAnalogRead ;
+  node->analogWrite = gbWiringPiAnalogWrite ;
 
   return 0 ;
 }

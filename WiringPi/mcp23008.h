@@ -1,6 +1,6 @@
 /*
- * wiringPiI2C.h:
- *	Simplified I2C access routines
+ * 23008.h:
+ *	Extend wiringPi with the MCP 23008 I2C GPIO expander chip
  *	Copyright (c) 2013 Gordon Henderson
  ***********************************************************************
  * This file is part of wiringPi:
@@ -26,15 +26,7 @@
 extern "C" {
 #endif
 
-extern int wiringPiI2CRead       (int fd) ;
-extern int wiringPiI2CReadReg8   (int fd, int reg) ;
-extern int wiringPiI2CReadReg16  (int fd, int reg) ;
-
-extern int wiringPiI2CWrite      (int fd, int data) ;
-extern int wiringPiI2CWriteReg8  (int fd, int reg, int data) ;
-extern int wiringPiI2CWriteReg16 (int fd, int reg, int data) ;
-
-int wiringPiI2CSetup             (int devId) ;
+extern int mcp23008Setup (int pinBase, int i2cAddress) ;
 
 #ifdef __cplusplus
 }
